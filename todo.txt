@@ -1,0 +1,19 @@
+? - possible
+! - definite
+- - idea
+$ - will require work
+
+!Tron theme
+!Limited power per turn, never resets
+
+- - End Goal:
+	?Destroy your opponents 3 pillars:
+		-Destroy pillars with droids / magic cards
+	OR:
+	-
+?$ Card-Based:
+	-Cards could be used every turn
+	OR:
+	-Cards could might be only for special things, like builds
+
+$! User can undo their changes
