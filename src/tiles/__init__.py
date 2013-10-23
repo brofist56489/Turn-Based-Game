@@ -19,8 +19,8 @@ class Tile():
 		self.texture.blit(TILE_MAP, [0, 0], textRect)
 
 	def render(self, screen, x, y):
-		""" x and y are absolute coords """
 		screen.render(self.texture, x * TILE_WIDTH, y * TILE_HEIGHT)
 
 AIR = Tile(0, [0, 0], False)
 WALL = Tile(1, [1, 0], True)
+RED_WALL = Tile(2, [2, 0], True)

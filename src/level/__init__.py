@@ -19,9 +19,20 @@ class Level():
 		data = data[2::]
 		tiles = data
 
+	def get_tile(self, x, y):
+		if x < 0 or y < 0 or x >= LEVEL_WIDTH or y >= LEVEL_HEIGHT:
+			return None
+		t = self.tiles[x + y * LEVEL_WIDTH]
+		return tiles.TILES[t]
+
+	def set_tile(self, x, y, t):
+		if x < 0 or y < 0 or x >= LEVEL_WIDTH or y >= LEVEL_HEIGHT:
+			return
+		self.tiles[x + y * LEVEL_WIDTH] = t.id
+
 	def render(self, screen):
 		for x in range(0, LEVEL_WIDTH):
 			for y in range(0, LEVEL_HEIGHT):
-				t = self.tiles[x + y * LEVEL_WIDTH]
-				if t != -1:
-					tiles.TILES[t].render(screen, x, y)
+				t = self.get_tile(x, y)
+				if t != None:
+					t.render(screen, x, y)

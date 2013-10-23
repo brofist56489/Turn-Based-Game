@@ -4,6 +4,8 @@ from pygame.locals import *
 
 from src.net import GameNetwork
 from src.level import Level
+from src.astar import AStarPathFinder
+from src import tiles
 
 import threading, time
 
@@ -13,14 +15,27 @@ TITLE = "Turn Based"
 
 class Game():
     def __init__(self):
-        self.__init_video()
-        GameNetwork.MakeServer().start()
         self.level = Level()
+        for x in range(0, 18):
+            self.level.set_tile(x, 5, tiles.WALL)
+            self.level.set_tile(x + 2, 7, tiles.WALL)
+        self.level.set_tile(18, 4, tiles.WALL)
+        pf = AStarPathFinder(self.level, (0, 0), (8, 14))
+        ts = pf.find_path()
+        for t in ts:
+            self.level.set_tile(t[0], t[1], tiles.RED_WALL)
+
+        if input("Is Server Y/N") == "Y":
+            GameNetwork.MakeServer().start()
+        else:
+            GameNetwork.MakeClient().start()
+
+        self.__init_video()
         return
     
     def __init_video(self):
         pygame.init()
-        self.display = pygame.display.set_mode((WIDTH, HEIGHT), HWSURFACE | DOUBLEBUF | RLEACCEL | FULLSCREEN)
+        self.display = pygame.display.set_mode((WIDTH, HEIGHT), HWSURFACE | DOUBLEBUF | RLEACCEL)
         pygame.display.set_caption(TITLE)
         self.screen = Screen()
         return

@@ -17,11 +17,13 @@ class GameNetwork(threading.Thread):
 	def MakeServer():
 		server = GameNetwork()
 		server.type = "server"
+		GameNetwork.this = server
 		return server
 
 	def MakeClient():
 		client = GameNetwork()
-		server.type = "client"
+		client.type = "client"
+		GameNetwork.this = client
 		return client
 
 	def __init__(self):
@@ -46,6 +48,7 @@ class GameNetwork(threading.Thread):
 	def run(self):
 		if self.type == "server":
 			self.init_server()
+			GameNetwork.send_packet("print_data", "Welcome To My Server")
 		elif self.type == "client":
 			self.init_client()
 		else:
@@ -59,6 +62,24 @@ class GameNetwork(threading.Thread):
 				print("Invald packet format:\n", pack.decode("utf-8"))
 				continue
 			getattr(self, data[0])(data[1::])
+
+	def send(things):
+		sock = GameNetwork.this.socket
+		msg = json.dumps(things).encode()
+		sock.send(msg)
+
+	def send_packet(method, params):
+		if not isinstance(params, list):
+			params = [params]
+		params.insert(0, method)
+		GameNetwork.send(params)
+
+	def invoke_method(method, params):
+		getattr(GameNetwork.this, method)(params)
+		if not isinstance(params, list):
+			params = [params]
+		params.insert(0, method)
+		GameNetwork.send(params)
 
 	def print_data(self, data):
 		print(data)
